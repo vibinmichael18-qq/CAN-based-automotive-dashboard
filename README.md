@@ -1,6 +1,6 @@
 # 🚗 CAN Based Automotive Dashboard
 
-An embedded systems project that implements a **CAN-Based Automotive Dashboard** using the **PIC18F4580** microcontroller. It receives real-time vehicle data over the **CAN protocol** and displays parameters such as speed, RPM, temperature, and fuel level on an LCD.
+An embedded systems project that implements a **CAN-Based Automotive Dashboard** using the **PIC18F4580** microcontroller. It receives real-time vehicle data over the **CAN protocol** and displays parameters such as **RPM, Speed, Turn Indicators, Gear Position, and Hazard Lights** on an LCD.
 
 ---
 
@@ -28,10 +28,13 @@ This project simulates a real-time **automotive dashboard** built around the PIC
 ## ✨ Features
 
 - 📡 **CAN Communication** — Receives real-time vehicle data over the CAN protocol
-- 🖥️ **Real-Time Display** — Shows speed, RPM, temperature, and fuel level on an LCD
+- 🏎️ **RPM Display** — Shows real-time engine RPM
+- 🚀 **Speed Display** — Shows real-time vehicle speed
+- ↔️ **Turn Indicators** — Displays left/right indicator status
+- ⚙️ **Gear Position** — Shows current gear status
+- ⚠️ **Hazard Lights** — Displays hazard light on/off status
 - 🔄 **Bootloader Support** — Firmware updates via Tiny Bootloader over UART, without an external programmer
-- ⚙️ **Multi-Peripheral Integration** — Combines CAN module, LCD, and UART for reliable operation
-- 🚘 **Automotive Application** — Simulates real-world vehicle dashboard behavior
+- 🧩 **Multi-Peripheral Integration** — Combines CAN module, LCD, and UART for reliable operation
 
 ---
 
@@ -54,7 +57,13 @@ CAN-Automotive-Dashboard/
 │   ├── main.c
 │   ├── can_config.c
 │   ├── lcd_driver.c
-│   └── dashboard.h
+│   ├── dashboard.h
+│   └── modules/
+│       ├── rpm.c
+│       ├── speed.c
+│       ├── indicator.c
+│       ├── gear.c
+│       └── hazard.c
 ├── bootloader/
 │   └── TinyBootloader/
 ├── docs/
@@ -74,6 +83,7 @@ CAN-Automotive-Dashboard/
 - Tiny Bootloader software
 - CAN transceiver module and CAN bus setup
 - Character LCD display
+- Indicator/hazard switch inputs, gear position sensor/simulation inputs
 
 ### Installation & Flashing
 
@@ -93,21 +103,22 @@ CAN-Automotive-Dashboard/
 2. The microcontroller continuously listens for incoming CAN messages from other nodes on the network.
 3. Received messages are decoded and relevant parameters are extracted.
 4. The LCD updates in real time to display:
-   - Speed
-   - RPM
-   - Temperature
-   - Fuel Level
+   - **RPM**
+   - **Speed**
+   - **Turn Indicator status (Left/Right)**
+   - **Gear Position**
+   - **Hazard Light status (On/Off)**
 
 ---
 
 ## ⚙️ How It Works
 
 1. **CAN Message Reception**
-   - The CAN module on the PIC18F4580 is configured to receive messages from connected CAN nodes.
+   - The CAN module on the PIC18F4580 is configured to receive messages from connected CAN nodes (engine sensors, indicator switches, gear sensor, hazard switch).
 2. **Data Decoding**
-   - Incoming CAN messages are parsed to extract individual vehicle parameters.
+   - Incoming CAN messages are parsed to extract RPM, speed, indicator status, gear position, and hazard status.
 3. **LCD Update**
-   - Decoded values are formatted and displayed on the character LCD with minimal delay.
+   - Decoded values are formatted and displayed on the character LCD with minimal delay, refreshing continuously as new CAN messages arrive.
 4. **Firmware Updates**
    - New firmware can be uploaded via Tiny Bootloader over UART, without needing an external hardware programmer.
 
@@ -115,8 +126,9 @@ CAN-Automotive-Dashboard/
 
 ## 🧩 Challenges & Learnings
 
-- **CAN Communication Setup:** Overcame message configuration and synchronization issues by properly configuring the CAN module and verifying transmission/reception.
-- **Real-Time Data Display:** Achieved efficient data processing by decoding CAN messages correctly and updating the LCD with minimal delay.
+- **CAN Communication Setup:** Overcame message configuration and synchronization issues by properly configuring the CAN module and verifying transmission/reception across multiple parameter types.
+- **Real-Time Data Display:** Achieved efficient data processing by decoding CAN messages for RPM, speed, indicator, gear, and hazard status, and updating the LCD with minimal delay.
+- **Multi-Parameter Synchronization:** Managed simultaneous updates of multiple independent parameters (RPM, speed, indicator, gear, hazard) without display flicker or data mismatch.
 - **Bootloader Programming:** Configured the serial interface correctly to enable firmware uploads via Tiny Bootloader without an external programmer.
 - **Multi-Peripheral Integration:** Strengthened understanding of embedded C, CAN protocol, and microcontroller architecture by reliably integrating the CAN module, LCD, and UART together.
 
@@ -124,8 +136,9 @@ CAN-Automotive-Dashboard/
 
 ## 🔮 Future Enhancements
 
-- Add support for additional vehicle parameters (battery voltage, tire pressure, etc.)
+- Add support for additional vehicle parameters (battery voltage, fuel level, temperature)
 - Implement a graphical display (TFT/OLED) instead of character LCD
+- Add audible/visual alerts for hazard and indicator activation
 - Add data logging for diagnostic purposes
 - Integrate wireless telemetry (Bluetooth/Wi-Fi) for remote monitoring
 
